@@ -1,0 +1,22 @@
+name: Trivy Image Scan
+on:
+  push:
+    branches: [main]
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t dvwa-app .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: dvwa-app
+          format: table
+          exit-code: 1
+          ignore-unfixed: true
+          vuln-type: os,library

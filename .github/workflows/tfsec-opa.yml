@@ -1,0 +1,19 @@
+name: IaC Security: tfsec + OPA
+
+on:
+  pull_request:
+    paths:
+      - 'tf/**'
+
+jobs:
+  tfsec-opa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0
+      - name: Run OPA policy checks
+        uses: instrumenta/conftest-action@v1.0.0
+        with:
+          files: tf/main.tf
+          policy: tf/policies

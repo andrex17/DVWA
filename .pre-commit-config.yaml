@@ -1,0 +1,16 @@
+repos:
+  - repo: https://github.com/returntocorp/semgrep
+    rev: v1.70.0
+    hooks:
+      - id: semgrep
+        args: ["--config=p/default"]
+
+  - repo: local
+    hooks:
+      - id: trivy-scan
+        name: Trivy Filesystem Scan
+        entry: trivy fs .
+        language: system
+        types: [yaml, json, dockerfile]
+        always_run: true
+        verbose: true

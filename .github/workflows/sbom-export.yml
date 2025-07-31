@@ -1,0 +1,19 @@
+name: Export SBOM
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image
+        run: docker build -t dvwa-app .
+      - name: Generate CycloneDX SBOM
+        run: trivy image --format cyclonedx --output sbom.json dvwa-app
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sbom
+          path: sbom.json
